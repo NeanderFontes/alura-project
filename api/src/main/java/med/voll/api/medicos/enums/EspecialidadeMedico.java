@@ -1,6 +1,6 @@
 package med.voll.api.medicos.enums;
 
-public enum Especialidade {
+public enum EspecialidadeMedico {
     ORTOPEDIA("Ortopedia"),
     CARDIOLOGIA("Cardiologia"),
     GINECOLOGIA("Ginecologia"),
@@ -8,7 +8,7 @@ public enum Especialidade {
 
     private final String nomeEspecialidade;
 
-    Especialidade(String nomeEspecialidade) {
+    EspecialidadeMedico(String nomeEspecialidade) {
         this.nomeEspecialidade = nomeEspecialidade;
     }
 
