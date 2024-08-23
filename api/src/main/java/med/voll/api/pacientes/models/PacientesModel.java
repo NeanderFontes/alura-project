@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import med.voll.api.endereco.models.EnderecoModel;
 import med.voll.api.pacientes.dtos.DadosCadastroPacientesDTO;
+import med.voll.api.pacientes.dtos.DadosToUpdatePacientesDTO;
 
 @Entity(name = "Pacientes")
 @Table(name = "pacientes")
@@ -32,5 +33,19 @@ public class PacientesModel {
         this.telefone = dadosPacientesDTO.telefone();
         this.cpf = dadosPacientesDTO.cpf();
         this.endereco = new EnderecoModel(dadosPacientesDTO.endereco());
+    }
+
+    public void updateDadosPacientes(DadosToUpdatePacientesDTO dadosUpdatePacientes) {
+        if (dadosUpdatePacientes.nome() != null) {
+            this.nome = dadosUpdatePacientes.nome();
+        }
+
+        if (dadosUpdatePacientes.telefone() != null) {
+            this.telefone = dadosUpdatePacientes.telefone();
+        }
+
+        if (dadosUpdatePacientes.endereco() != null) {
+            this.endereco.updateInfoEndereco(dadosUpdatePacientes.endereco());
+        }
     }
 }
