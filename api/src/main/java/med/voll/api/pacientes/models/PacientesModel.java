@@ -24,10 +24,12 @@ public class PacientesModel {
     private String email;
     private String telefone;
     private String cpf;
+    private Boolean ativo;
     @Embedded
     private EnderecoModel endereco;
 
     public PacientesModel(DadosCadastroPacientesDTO dadosPacientesDTO) {
+        this.ativo = true;
         this.nome = dadosPacientesDTO.nome();
         this.email = dadosPacientesDTO.email();
         this.telefone = dadosPacientesDTO.telefone();
@@ -47,5 +49,9 @@ public class PacientesModel {
         if (dadosUpdatePacientes.endereco() != null) {
             this.endereco.updateInfoEndereco(dadosUpdatePacientes.endereco());
         }
+    }
+
+    public void exclusaoLogica() {
+        this.ativo = false;
     }
 }
