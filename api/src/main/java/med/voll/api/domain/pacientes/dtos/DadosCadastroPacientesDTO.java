@@ -1,10 +1,10 @@
-package med.voll.api.pacientes.dtos;
+package med.voll.api.domain.pacientes.dtos;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import med.voll.api.endereco.dtos.DadosEnderecoDTO;
+import med.voll.api.domain.endereco.dtos.DadosEnderecoDTO;
 import org.hibernate.validator.constraints.br.CPF;
 
 public record DadosCadastroPacientesDTO(

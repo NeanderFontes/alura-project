@@ -1,14 +1,14 @@
-package med.voll.api.medicos.models;
+package med.voll.api.domain.medicos.models;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import med.voll.api.endereco.models.EnderecoModel;
-import med.voll.api.medicos.dtos.DadosCadastroMedicosDTO;
-import med.voll.api.medicos.dtos.DadosToUpdateMedicosDTO;
-import med.voll.api.medicos.enums.EspecialidadeMedico;
+import med.voll.api.domain.endereco.models.EnderecoModel;
+import med.voll.api.domain.medicos.dtos.DadosCadastroMedicosDTO;
+import med.voll.api.domain.medicos.enums.EspecialidadeMedico;
+import med.voll.api.domain.medicos.dtos.DadosToUpdateMedicosDTO;
 
 @Entity(name = "Medico")
 @Table(name = "medicos")

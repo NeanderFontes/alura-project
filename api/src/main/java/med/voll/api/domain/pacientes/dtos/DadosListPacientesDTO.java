@@ -1,6 +1,6 @@
-package med.voll.api.pacientes.dtos;
+package med.voll.api.domain.pacientes.dtos;
 
-import med.voll.api.pacientes.models.PacientesModel;
+import med.voll.api.domain.pacientes.models.PacientesModel;
 
 public record DadosListPacientesDTO(
         Long id,

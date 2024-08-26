@@ -1,4 +1,4 @@
-package med.voll.api.medicos.dtos;
+package med.voll.api.domain.medicos.dtos;
 
 import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -8,8 +8,8 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
-import med.voll.api.endereco.dtos.DadosEnderecoDTO;
-import med.voll.api.medicos.enums.EspecialidadeMedico;
+import med.voll.api.domain.endereco.dtos.DadosEnderecoDTO;
+import med.voll.api.domain.medicos.enums.EspecialidadeMedico;
 
 public record DadosCadastroMedicosDTO(
         @NotBlank
