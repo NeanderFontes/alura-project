@@ -26,11 +26,12 @@ public class MedicoController {
 
     @PostMapping
     @Transactional
-    public ResponseEntity cadastrar(@RequestBody @Valid DadosCadastroMedicosDTO dadosMedicos, UriComponentsBuilder uriComponentsBuilder) {
-        // Variavel de referencia para criar novo médico
+    public ResponseEntity cadastrar(@RequestBody @Valid DadosCadastroMedicosDTO dadosMedicos,
+                                    UriComponentsBuilder uriComponentsBuilder) {
+        // Criando variável de um novo cadastro do object reference(MedicoModel), nova entidade no DB
         MedicoModel entityModel = repository.save(new MedicoModel(dadosMedicos));
 
-        // Variavel encapsulada do endereço 'uri' Spring para response httpStatus
+        // Variável URI encapsulada com Location('endereço ou Header') para FrontEnd
         var uri = uriComponentsBuilder.path("/medicos/{id}").buildAndExpand(entityModel.getId()).toUri();
 
         // Response HttpStatus CREATED com URI e BODY do Objeto novo criado
