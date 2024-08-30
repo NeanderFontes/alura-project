@@ -1,17 +1,22 @@
 package med.voll.api.controller;
 
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
-import med.voll.api.medicos.dtos.DadosCadastroMedicosDTO;
-import med.voll.api.medicos.dtos.DadosListMedicosDTO;
-import med.voll.api.medicos.dtos.DadosToUpdateMedicosDTO;
-import med.voll.api.medicos.models.MedicoModel;
-import med.voll.api.medicos.repositories.MedicoRepository;
+import med.voll.api.domain.medicos.dtos.DadosCadastroMedicosDTO;
+import med.voll.api.domain.medicos.dtos.DadosListMedicosDTO;
+import med.voll.api.domain.medicos.dtos.DadosToUpdateMedicosDTO;
+import med.voll.api.domain.medicos.dtos.ResponseBodyDadosMedicosDTO;
+import med.voll.api.domain.medicos.models.MedicoModel;
+import med.voll.api.domain.medicos.repositories.MedicoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.util.UriComponentsBuilder;
 
 @RestController
 @RequestMapping("/medicos")
@@ -22,27 +27,47 @@ public class MedicoController {
 
     @PostMapping
     @Transactional
-    public void cadastrar(@RequestBody @Valid DadosCadastroMedicosDTO dadosMedicos) {
-        repository.save(new MedicoModel(dadosMedicos));
+    public ResponseEntity<ResponseBodyDadosMedicosDTO> cadastrar(@RequestBody @Valid DadosCadastroMedicosDTO dadosMedicos,
+                                    UriComponentsBuilder uriComponentsBuilder) {
+        // Criando variável de um novo cadastro do object reference(MedicoModel), nova entidade no DB
+        MedicoModel entityModel = repository.save(new MedicoModel(dadosMedicos));
+
+        // Variável URI encapsulada com Location('endereço ou Header') para FrontEnd
+        var uri = uriComponentsBuilder.path("/medicos/{id}").buildAndExpand(entityModel.getId()).toUri();
+
+        // Response HttpStatus CREATED com URI e BODY do Objeto novo criado
+        return ResponseEntity.created(uri).body(new ResponseBodyDadosMedicosDTO(entityModel));
     }
 
     @GetMapping
-    public Page<DadosListMedicosDTO> listAll(@PageableDefault(size = 10) Pageable pageable) {
-        return repository.findAllByAtivoTrue(pageable).map(DadosListMedicosDTO::new);
+    public ResponseEntity<Page<DadosListMedicosDTO>> listAll(@PageableDefault(size = 10) Pageable pageable) {
+        var entityPage = repository.findAllByAtivoTrue(pageable).map(DadosListMedicosDTO::new);
+        return ResponseEntity.ok(entityPage);
+    }
+
+    @GetMapping(value = "/{id}")
+    public ResponseEntity<ResponseBodyDadosMedicosDTO> getById(@PathVariable Long id) {
+        MedicoModel entityModel = repository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Médico não encontrado com ID: " + id));
+        return ResponseEntity.ok(new ResponseBodyDadosMedicosDTO(entityModel));
     }
 
     @PutMapping
     @Transactional
-    public void atualizar(@RequestBody @Valid DadosToUpdateMedicosDTO dadosUpdateMedicos) {
+    public ResponseEntity<ResponseBodyDadosMedicosDTO> atualizar(@RequestBody @Valid DadosToUpdateMedicosDTO dadosUpdateMedicos) {
         MedicoModel entityModel = repository.getReferenceById(dadosUpdateMedicos.id());
+
         entityModel.updateDadosMedicos(dadosUpdateMedicos);
+
+        return ResponseEntity.ok(new ResponseBodyDadosMedicosDTO(entityModel));
     }
 
     @DeleteMapping(value = "/{id}")
     @Transactional
-    public void exclusaoLogica(@PathVariable Long id) {
+    public ResponseEntity<Void> exclusaoLogica(@PathVariable Long id) {
         MedicoModel entityModel = repository.getReferenceById(id);
         entityModel.exclusaoLogica();
-    }
 
+        return ResponseEntity.noContent().build();
+    }
 }
