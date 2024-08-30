@@ -18,11 +18,4 @@ public record DadosToUpdateMedicosDTO(
         @JsonAlias({"enderecoDTO", "endereco DTO", "endereco", "endereco-DTO"})
         @Valid
         DadosEnderecoDTO enderecoDTO) {
-
-//    public DadosToUpdateMedicosDTO(MedicoModel medicoModel) {
-//        this.id = medicoModel.getId();
-//        this.nome = medicoModel.getNome();
-//        this.telefone = medicoModel.getTelefone();
-//        this.enderecoDTO = medicoModel.getEndereco();
-//    }
 }

@@ -1,5 +1,6 @@
 package med.voll.api.controller;
 
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import med.voll.api.domain.medicos.dtos.DadosCadastroMedicosDTO;
 import med.voll.api.domain.medicos.dtos.DadosListMedicosDTO;
@@ -26,7 +27,7 @@ public class MedicoController {
 
     @PostMapping
     @Transactional
-    public ResponseEntity cadastrar(@RequestBody @Valid DadosCadastroMedicosDTO dadosMedicos,
+    public ResponseEntity<ResponseBodyDadosMedicosDTO> cadastrar(@RequestBody @Valid DadosCadastroMedicosDTO dadosMedicos,
                                     UriComponentsBuilder uriComponentsBuilder) {
         // Criando variável de um novo cadastro do object reference(MedicoModel), nova entidade no DB
         MedicoModel entityModel = repository.save(new MedicoModel(dadosMedicos));
@@ -45,23 +46,20 @@ public class MedicoController {
     }
 
     @GetMapping(value = "/{id}")
-    public ResponseEntity getById(@PathVariable Long id) {
-        MedicoModel entityModel = repository.getReferenceById(id);
-        if (!entityModel.getAtivo()) {
-            throw new RuntimeException("DR " + entityModel.getNome() +
-                    ", CRM: " + entityModel.getCrm() + " Inativo.");
-        }
+    public ResponseEntity<ResponseBodyDadosMedicosDTO> getById(@PathVariable Long id) {
+        MedicoModel entityModel = repository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Médico não encontrado com ID: " + id));
         return ResponseEntity.ok(new ResponseBodyDadosMedicosDTO(entityModel));
     }
 
     @PutMapping
     @Transactional
-    public ResponseEntity atualizar(@RequestBody @Valid DadosToUpdateMedicosDTO dadosUpdateMedicos) {
+    public ResponseEntity<ResponseBodyDadosMedicosDTO> atualizar(@RequestBody @Valid DadosToUpdateMedicosDTO dadosUpdateMedicos) {
         MedicoModel entityModel = repository.getReferenceById(dadosUpdateMedicos.id());
+
         entityModel.updateDadosMedicos(dadosUpdateMedicos);
 
-//        return ResponseEntity.ok(new ResponseBodyDadosMedicosDTO(entityModel));
-        return ResponseEntity.status(HttpStatus.OK).body(new ResponseBodyDadosMedicosDTO(entityModel));
+        return ResponseEntity.ok(new ResponseBodyDadosMedicosDTO(entityModel));
     }
 
     @DeleteMapping(value = "/{id}")

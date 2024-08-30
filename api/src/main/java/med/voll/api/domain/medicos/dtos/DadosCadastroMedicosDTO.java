@@ -20,7 +20,7 @@ public record DadosCadastroMedicosDTO(
         @NotBlank
         String telefone,
         @NotBlank
-        @Pattern(regexp = "\\d{4,6}")
+        @Pattern(regexp = "\\d{4,6}", message = "Tamanho entre 4 e 6")
         String crm,
         @NotNull
         @JsonProperty("especialidadeMedicos")
